@@ -7,10 +7,7 @@ locals {
   }
 }
 
-# ============================================================
-# VPC
-# ============================================================
-
+# Red principal
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
@@ -21,10 +18,7 @@ resource "aws_vpc" "main" {
   }
 }
 
-# ============================================================
-# INTERNET GATEWAY
-# ============================================================
-
+# Salida de la VPC hacia Internet
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
@@ -33,10 +27,7 @@ resource "aws_internet_gateway" "main" {
   }
 }
 
-# ============================================================
-# PUBLIC SUBNETS
-# ============================================================
-
+# Subredes públicas
 resource "aws_subnet" "public_a" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.public_subnet_a_cidr
@@ -59,10 +50,7 @@ resource "aws_subnet" "public_b" {
   }
 }
 
-# ============================================================
-# PRIVATE SUBNETS
-# ============================================================
-
+# Subredes privadas para los recursos internos
 resource "aws_subnet" "private_a" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private_subnet_a_cidr
@@ -83,10 +71,7 @@ resource "aws_subnet" "private_b" {
   }
 }
 
-# ============================================================
-# PUBLIC ROUTE TABLE
-# ============================================================
-
+# Tabla de rutas para las subredes públicas
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
@@ -110,10 +95,7 @@ resource "aws_route_table_association" "public_b" {
   route_table_id = aws_route_table.public.id
 }
 
-# ============================================================
-# ELASTIC IPs FOR NAT
-# ============================================================
-
+# IPs públicas de los NAT Gateway
 resource "aws_eip" "nat_a" {
   domain = "vpc"
 
@@ -130,10 +112,7 @@ resource "aws_eip" "nat_b" {
   }
 }
 
-# ============================================================
-# NAT GATEWAYS
-# ============================================================
-
+# NAT Gateway para cada zona
 resource "aws_nat_gateway" "nat_a" {
   allocation_id = aws_eip.nat_a.id
   subnet_id     = aws_subnet.public_a.id
@@ -160,10 +139,7 @@ resource "aws_nat_gateway" "nat_b" {
   ]
 }
 
-# ============================================================
-# PRIVATE ROUTE TABLES
-# ============================================================
-
+# Rutas de salida para las subredes privadas
 resource "aws_route_table" "private_a" {
   vpc_id = aws_vpc.main.id
 

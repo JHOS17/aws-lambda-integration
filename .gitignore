@@ -6,24 +6,24 @@ crash.log
 crash.*.log
 *.tfplan
 
-# Terraform lock
-# Mantener .terraform.lock.hcl versionado
+# Mantener el lock de Terraform
+# .terraform.lock.hcl sí se sube al repositorio
 
-# Lambda dependencies
+# Dependencias de Node
 node_modules/
 
-# Generated Lambda packages
+# Archivos ZIP generados para Lambda
 *.zip
 
-# Environment / secrets
+# Variables y archivos con datos sensibles
 .env
 .env.*
 !.env.example
 
-# IDE
+# Configuración del editor
 .vscode/
 .idea/
 
-# OS
+# Archivos del sistema
 Thumbs.db
 .DS_Store
