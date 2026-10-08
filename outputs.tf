@@ -28,3 +28,24 @@ output "private_subnet_ids" {
     aws_subnet.private_b.id
   ]
 }
+
+# Lambda
+output "upload_lambda_arn" {
+  description = "ARN de la función Upload Lambda para integración en API Gateway (PR 4)"
+  value       = aws_lambda_function.upload_lambda.arn
+}
+
+output "upload_lambda_function_name" {
+  description = "Nombre de la función Upload Lambda"
+  value       = aws_lambda_function.upload_lambda.function_name
+}
+
+output "crop_lambda_arn" {
+  description = "ARN de la función Crop Lambda"
+  value       = aws_lambda_function.crop_lambda.arn
+}
+
+output "crop_lambda_function_name" {
+  description = "Nombre de la función Crop Lambda"
+  value       = aws_lambda_function.crop_lambda.function_name
+}
