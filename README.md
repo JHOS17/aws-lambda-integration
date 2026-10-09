@@ -206,8 +206,6 @@ Revisa CloudWatch Logs si ocurre algún error.
 
 ## 9. Cómo destruir los recursos
 
-**Advertencia:** `terraform destroy` elimina los recursos administrados por Terraform en el estado seleccionado. Puede eliminar datos almacenados y otros recursos necesarios para la aplicación.
-
 Primero selecciona el workspace correcto:
 
 ```powershell
