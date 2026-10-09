@@ -45,23 +45,3 @@ variable "private_subnet_b_cidr" {
   type    = string
   default = "10.0.12.0/24"
 }
-
-# --- VARIABLES REQUERIDAS PARA LAMBDAS (PR 3) ---
-
-variable "upload_lambda_role_arn" {
-  type        = string
-  description = "ARN del rol de IAM para Upload Lambda (creado en PR 4)"
-  default     = "arn:aws:iam::123456789012:role/upload-lambda-role"
-}
-
-variable "crop_lambda_role_arn" {
-  type        = string
-  description = "ARN del rol de IAM para Crop Lambda (creado en PR 4)"
-  default     = "arn:aws:iam::123456789012:role/crop-lambda-role"
-}
-
-variable "lambda_security_group_id" {
-  type        = string
-  description = "ID del Security Group para Lambdas (creado en PR 4)"
-  default     = "sg-12345678"
-}

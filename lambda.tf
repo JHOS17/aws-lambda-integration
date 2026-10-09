@@ -17,7 +17,7 @@ data "archive_file" "crop_lambda_zip" {
 resource "aws_lambda_function" "upload_lambda" {
   filename         = data.archive_file.upload_lambda_zip.output_path
   function_name    = "image-processor-${var.environment}-upload"
-  role             = var.upload_lambda_role_arn
+  role             = aws_iam_role.upload_lambda.arn
   handler          = "index.handler"
   runtime          = "nodejs22.x"
   memory_size      = 256
@@ -26,7 +26,7 @@ resource "aws_lambda_function" "upload_lambda" {
 
   vpc_config {
     subnet_ids         = [aws_subnet.private_a.id, aws_subnet.private_b.id]
-    security_group_ids = [var.lambda_security_group_id]
+    security_group_ids = [aws_security_group.lambda.id]
   }
 
   environment {
@@ -39,13 +39,19 @@ resource "aws_lambda_function" "upload_lambda" {
   tags = {
     Name = "image-processor-${var.environment}-upload"
   }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.upload_basic,
+    aws_iam_role_policy_attachment.upload_vpc,
+    aws_iam_role_policy.upload_s3_access
+  ]
 }
 
 # Crop Lambda
 resource "aws_lambda_function" "crop_lambda" {
   filename         = data.archive_file.crop_lambda_zip.output_path
   function_name    = "image-processor-${var.environment}-crop"
-  role             = var.crop_lambda_role_arn
+  role             = aws_iam_role.crop_lambda.arn
   handler          = "index.handler"
   runtime          = "nodejs22.x"
   memory_size      = 512
@@ -54,7 +60,7 @@ resource "aws_lambda_function" "crop_lambda" {
 
   vpc_config {
     subnet_ids         = [aws_subnet.private_a.id, aws_subnet.private_b.id]
-    security_group_ids = [var.lambda_security_group_id]
+    security_group_ids = [aws_security_group.lambda.id]
   }
 
   environment {
@@ -67,6 +73,13 @@ resource "aws_lambda_function" "crop_lambda" {
   tags = {
     Name = "image-processor-${var.environment}-crop"
   }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.crop_basic,
+    aws_iam_role_policy_attachment.crop_vpc,
+    aws_iam_role_policy.crop_s3_access,
+    aws_iam_role_policy.crop_sqs_access
+  ]
 }
 
 # Event Source Mapping: SQS → Crop Lambda
@@ -79,6 +92,6 @@ resource "aws_lambda_event_source_mapping" "sqs_crop_trigger" {
 
   depends_on = [
     aws_lambda_function.crop_lambda,
-    aws_sqs_queue.main_queue,
+    aws_sqs_queue.main_queue
   ]
 }
