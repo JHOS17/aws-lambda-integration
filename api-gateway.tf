@@ -1,8 +1,7 @@
 # Variables propias del API Gateway
 variable "cors_allowed_origins" {
-  description = "Origenes permitidos por CORS. Usar dominios concretos en prod."
+  description = "Orígenes permitidos por CORS para cada entorno"
   type        = list(string)
-  default     = ["*"]
 }
 
 variable "api_throttling_rate_limit" {
@@ -20,7 +19,7 @@ variable "api_throttling_burst_limit" {
 variable "api_log_retention_days" {
   description = "Dias de retencion de los access logs en CloudWatch"
   type        = number
-  default     = 30
+  default     = 14
 }
 
 variable "custom_domain_name" {
@@ -49,6 +48,13 @@ resource "aws_apigatewayv2_api" "http" {
   }
 
   tags = local.common_tags
+
+  lifecycle {
+    precondition {
+      condition     = var.environment != "prod" || !contains(var.cors_allowed_origins, "*")
+      error_message = "En prod debes configurar origenes CORS especificos; no se permite '*'."
+    }
+  }
 }
 
 # Integracion Lambda proxy con payload format 2.0

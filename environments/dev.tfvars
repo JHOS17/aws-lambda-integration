@@ -1,1 +1,3 @@
-environment = "dev"
+environment            = "dev"
+cors_allowed_origins   = ["*"]
+api_log_retention_days = 14
