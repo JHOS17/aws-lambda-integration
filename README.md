@@ -261,8 +261,6 @@ aws-lambda-integration/
 
 Los archivos `.tf` definen la infraestructura, `environments/` contiene la configuración por entorno y `lambda/` contiene el código de las funciones. El script `build-lambdas.ps1` instala las dependencias necesarias para crear los paquetes de despliegue.
 
-Los archivos de estado de Terraform, dependencias instaladas, paquetes ZIP generados y credenciales no deben incluirse en Git.
-
 ### Alertas por correo
 
 La variable `alarm_email` permite configurar un correo para recibir las alertas de SNS. Para habilitar la suscripción, proporciona un correo al ejecutar Terraform, por ejemplo:
