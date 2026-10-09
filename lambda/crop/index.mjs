@@ -38,6 +38,15 @@ export const handler = async (event) => {
         continue;
       }
 
+      // Ignorar el evento de prueba que S3 envía al configurar notificaciones
+      // Este mensaje no contiene Records y no debe reintentarse.
+      if (cuerpoSQS?.Event === "s3:TestEvent") {
+        console.log(
+          `Evento de prueba de S3 ignorado: ${registro.messageId}`
+        );
+        continue;
+      }
+
       const eventoS3 = cuerpoSQS.Records ? cuerpoSQS.Records[0] : null;
 
       // 2. Validar estructura del evento S3
