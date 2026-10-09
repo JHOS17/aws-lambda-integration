@@ -1,0 +1,10 @@
+{
+  "name": "upload",
+  "version": "1.0.0",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1148.0",
+    "busboy": "^1.6.0"
+  }
+}

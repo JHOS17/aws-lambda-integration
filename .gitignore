@@ -6,11 +6,12 @@ crash.log
 crash.*.log
 *.tfplan
 
-# Terraform lock
-# Mantener .terraform.lock.hcl versionado
+# Terraform lock — mantener versionado
+# .terraform.lock.hcl
 
 # Lambda dependencies
 node_modules/
+lambda/**/node_modules/
 
 # Generated Lambda packages
 *.zip
